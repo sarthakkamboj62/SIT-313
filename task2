@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DEV@Deakin Newsletter</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f4f8;
+            color: #222;
+        }
+
+        /* Header */
+        header {
+            background: #005a32;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+            font-size: 15px;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        /* Main */
+        main {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .newsletter-card {
+            background: white;
+            width: 100%;
+            max-width: 650px;
+            padding: 45px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .newsletter-card h2 {
+            margin-top: 0;
+            color: #005a32;
+            font-size: 32px;
+        }
+
+        .newsletter-card p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        /* Form */
+        .subscribe-form {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .subscribe-form input {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #bbb;
+            border-radius: 7px;
+            font-size: 16px;
+        }
+
+        .subscribe-form button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 7px;
+            background: #005a32;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .subscribe-form button:hover {
+            background: #003d22;
+        }
+
+        /* Message */
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* Footer */
+        footer {
+            background: #222;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+
+            header {
+                flex-direction: column;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            nav a {
+                margin: 0 8px;
+            }
+
+            .newsletter-card {
+                padding: 30px 20px;
+            }
+
+            .newsletter-card h2 {
+                font-size: 27px;
+            }
+
+            .subscribe-form {
+                flex-direction: column;
+            }
+
+            .subscribe-form input,
+            .subscribe-form button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+
+        <h1>DEV@Deakin</h1>
+
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Articles</a>
+            <a href="#">Projects</a>
+        </nav>
+
+    </header>
+
+
+    <!-- Newsletter -->
+    <main>
+
+        <section class="newsletter-card">
+
+            <h2>Join DEV@Deakin</h2>
+
+            <p>
+                Stay connected with the DEV@Deakin community.
+                Subscribe to receive technology news, development
+                tips and interesting project updates.
+            </p>
+
+            <form id="subscribeForm" class="subscribe-form">
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    required
+                >
+
+                <button type="submit">
+                    Subscribe
+                </button>
+
+            </form>
+
+            <div id="message"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>© 2026 DEV@Deakin | Newsletter</p>
+
+    </footer>
+
+
+    <script>
+
+        const form = document.getElementById("subscribeForm");
+        const message = document.getElementById("message");
+
+
+        form.addEventListener("submit", async function(event) {
+
+            event.preventDefault();
+
+            const email = document.getElementById("email").value;
+
+            message.textContent = "Sending welcome email...";
+            message.style.color = "black";
+
+
+            try {
+
+                const response = await fetch("/subscribe", {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        email: email
+                    })
+
+                });
+
+
+                const data = await response.json();
+
+
+                if (response.ok) {
+
+                    message.textContent = data.message;
+                    message.style.color = "green";
+
+                    form.reset();
+
+                } else {
+
+                    message.textContent =
+                        data.message || "Something went wrong.";
+
+                    message.style.color = "red";
+                }
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    "Cannot connect to the server.";
+
+                message.style.color = "red";
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>
+```
